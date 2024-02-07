@@ -9,15 +9,14 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
-    public function getForm()
+    public function create()
     {
         return view('contact');
     }
 
-    public function postForm(ContactRequest $request)
+    public function store(ContactRequest $request)
     {
-        Mail::to('assembeenghot@gmail.com')
-        ->send(new contact($request->except('_token')));  
+        dd(\App\Models\contact::create ($request->all ()));
       return view('confirm');  
     }
 }
