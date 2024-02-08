@@ -16,7 +16,7 @@ class FilmController extends Controller
     {
         $query = $slug ? Category::whereSlug($slug)->firstOrFail()->films() : Film::query();
         $films = $query->withTrashed()->oldest('title')->paginate(5);
-        return view('index', compact('films', 'categories', 'slug'));
+        return view('index', compact('films', 'slug'));
     }
 
     /**
@@ -24,7 +24,7 @@ class FilmController extends Controller
      */
     public function create(): View
     {
-        return view('create', compact('categories'));
+        return view('create');
     }
 
     /**
@@ -32,7 +32,8 @@ class FilmController extends Controller
      */
     public function store(FilmRequest $filmRequest): RedirectResponse
     {
-        Film::create($filmRequest->all());
+        $film = Film::create($filmRequest->all());
+        $film->categories()->attach($filmRequest->cats);
         return redirect()->route('films.index')->with('info', 'Le film a bien été créé');
     }
 
@@ -41,8 +42,7 @@ class FilmController extends Controller
      */
     public function show(Film $film): View
     {
-        $category = $film->category->name;    
-        return view('show', compact('film', 'category'));
+        return view('show', compact('film'));
     }
 
     /**
@@ -59,9 +59,10 @@ class FilmController extends Controller
     public function update(FilmRequest $filmRequest, Film $film): RedirectResponse
     {
         $film->update($filmRequest->all());
+        $film->categories()->sync($filmRequest->cats);
         return redirect()->route('films.index')->with('info', 'Le film a bien été modifié');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */

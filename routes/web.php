@@ -23,7 +23,6 @@ Route::delete('films/force/{film}', [FilmController::class, 'forceDestroy'])->na
 Route::put('films/restore/{film}', [FilmController::class, 'restore'])->name('films.restore');
 Route::get('category/{slug}/films', [FilmController::class, 'index'])->name('films.category');
 
-
 Route::get('photo', [PhotoController::class, 'getPhoto']);
 Route::post('photo', [PhotoController::class, 'postPhoto']);
 

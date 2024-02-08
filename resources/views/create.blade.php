@@ -39,11 +39,11 @@
                     <form action="{{ route('films.store') }}" method="POST">
                     @csrf
                     <div class="field">
-                        <label class="label">Catégorie</label>
-                        <div class="select">
-                            <select name="category_id">
+                    <label class="label">Catégories</label>
+                        <div class="select is-multiple">
+                            <select name="cats[]" multiple>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    <option value="{{ $category->id }}" {{ in_array($category->id, old('cats') ?: []) ? 'selected' : '' }}>{{ $category->name }}</option>
                                 @endforeach
                             </select>
                         </div>
